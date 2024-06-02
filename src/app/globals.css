@@ -17,17 +17,20 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  @apply bg-neutral;
+}
+
+h1{
+  @apply text-2xl text-accent font-extrabold;
+
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.map-container {
+  border-radius: 10px; /* Vous pouvez ajuster ce nombre selon le degré de courbure souhaité */
 }
