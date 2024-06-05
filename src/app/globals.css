@@ -17,14 +17,18 @@
 }
 
 body {
-  @apply bg-neutral;
+  /* @apply bg-neutral; */
 }
 
 h1{
-  @apply text-2xl text-accent font-extrabold;
+  @apply text-2xl text-neutral-content font-extrabold;
 
 }
 
+
+h2{
+   @apply text-xl font-bold;
+}
 @layer utilities {
   .text-balance {
     text-wrap: balance;

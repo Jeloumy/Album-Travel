@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L, { GeoJSON, LeafletMouseEvent } from 'leaflet';
+import axios from 'axios';
 
 const WorldMap: React.FC = () => {
   const mapRef = useRef<L.Map | null>(null);
@@ -30,9 +31,18 @@ const WorldMap: React.FC = () => {
             style: function (feature) {
               return { color: "white", weight: 1, fillColor: "white", fillOpacity: 0.4 };
             },
-            onEachFeature: function (feature, layer: GeoJSON) {
-              layer.on('click', function (e: LeafletMouseEvent) {
+            onEachFeature: function (feature, layer:GeoJSON) {
+              layer.on('click', async function (e) { // Marking function as async
                 const currentStyle = (layer.options as any).fillColor;
+                console.log(feature.properties.name);
+    
+                try {
+                  const countryResponse = await axios.get(`https://restcountries.com/v3.1/name/${feature.properties.name}`);
+                  console.log(countryResponse.data); // Do something with the country data if needed
+                } catch (error) {
+                  console.error("Error fetching country data:", error);
+                }
+    
                 if (currentStyle === "white") {
                   layer.setStyle({ fillColor: "#2ABF7A", fillOpacity: 0.6 });
                 } else {
@@ -59,7 +69,7 @@ const WorldMap: React.FC = () => {
   }, []);
 
   return (
-    <div id="map" style={{ height: '550px', width: '827px', borderRadius: '15px' }}></div>
+    <div id="map" style={{ height: '550px', width: '700px', borderRadius: '15px' }}></div>
   );
 };
 

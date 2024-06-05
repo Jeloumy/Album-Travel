@@ -18,8 +18,9 @@ const CountryShapes: React.FC = () => {
       while (moreDataAvailable) {
         try {
           const response = await axios.get(
-            `https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/country_shapes/records?rows=${limit}&start=${offset}`
+            `https://restcountries.com/v3.1//name/france`
           );
+          console.log(response.data);
           const results = response.data.results || [];
           allData = [...allData, ...results];
           offset += limit;
@@ -44,15 +45,7 @@ console.log(allData);
   return (
     <div>
       <h1>Country Shapes</h1>
-      <ul>
-        {data.length > 0 ? (
-          data.map((record, index) => (
-            <li key={record.recordid || record.join_name || index}>{record.cntry_name}</li>
-          ))
-        ) : (
-          <li>Aucun enregistrement trouvé</li>
-        )}
-      </ul>
+
     </div>
   );
 };
