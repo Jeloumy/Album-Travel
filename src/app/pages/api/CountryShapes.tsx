@@ -17,7 +17,8 @@ const CountryShapes: React.FC = () => {
           superficie: country.area,
           nb_citizens: country.population,
           continents: country.region,
-          langues: Object.values(country.languages || {}).join(', ')
+          langues: Object.values(country.languages || {}).join(', '),
+          flag: country.flags.svg // URL du drapeau
         }));
         setData(results);
       } catch (error) {
@@ -36,10 +37,13 @@ const CountryShapes: React.FC = () => {
     <div>
       <h1>Country Information</h1>
       <ul>
+        
         {data.length > 0 ? (
           data.map((country, index) => (
             <li key={index}>
+              <br></br>
               <strong>{country.name_country}</strong><br />
+              <img src={country.flag} alt={`Drapeau de ${country.name_country}`} style={{ width: '100px', height: 'auto' }} /><br />
               Superficie: {country.superficie} km²<br />
               Population: {country.nb_citizens}<br />
               Continent: {country.continents}<br />
