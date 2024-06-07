@@ -4,10 +4,10 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import CountryShapes from '../api/CountryShapes';
-import AnswerCube from '@/app/components/answer-cube';
+import AnswerCube from '../components/answer-cube';
 
 // Charger WorldMap dynamiquement côté client
-const DynamicWorldMap = dynamic(() => import('../../components/WorldMap'), {
+const DynamicWorldMap = dynamic(() => import('../components/WorldMap'), {
   ssr: false
 });
 
