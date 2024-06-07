@@ -3,8 +3,10 @@ import React, { useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L, { GeoJSON, LeafletMouseEvent } from 'leaflet';
 import axios from 'axios';
+import { Country } from '../../types/country';
 
-const WorldMap: React.FC = () => {
+
+const WorldMap: React.FC<{ setCountryClicked: (country: any) => void; secretCountry: Country | null }> = ({ setCountryClicked, secretCountry }) => {
   const mapRef = useRef<L.Map | null>(null);
 
   useEffect(() => {
@@ -31,22 +33,29 @@ const WorldMap: React.FC = () => {
             style: function (feature) {
               return { color: "white", weight: 1, fillColor: "white", fillOpacity: 0.4 };
             },
-            onEachFeature: function (feature, layer:GeoJSON) {
+            onEachFeature: function (feature, layer: GeoJSON) {
               layer.on('click', async function (e) { // Marking function as async
                 const currentStyle = (layer.options as any).fillColor;
-                console.log(feature.properties.name);
-    
+                console.log("Clicked on", feature.properties.name);
+
+                if (feature.properties.name !== secretCountry?.name) {
+                  layer.setStyle({ fillColor: "#FF7D5C", fillOpacity: 0.6 });
+                } else {
+                  layer.setStyle({ fillColor: "#9FE88D", fillOpacity: 0.4 });
+                }
+
                 try {
-                  const countryResponse = await axios.get(`https://restcountries.com/v3.1/name/${feature.properties.name}`);
-                  console.log(countryResponse.data); // Do something with the country data if needed
+                  await axios.get(`https://countryapi.io/api/name/${feature.properties.name}?apikey=qsgT6TVTtg353XJQdeI8uEADwD5YKrfYvwsim2PF`).then(
+                    (countryResponse) => {
+                      const countryKey = Object.keys(countryResponse.data)[0];
+                      console.log(countryResponse.data[countryKey]);
+                      setCountryClicked(countryResponse.data[countryKey]);
+                    }).catch(error => {
+                      console.error("Error fetching country data:", error);
+                    }
+                  );
                 } catch (error) {
                   console.error("Error fetching country data:", error);
-                }
-    
-                if (currentStyle === "white") {
-                  layer.setStyle({ fillColor: "#2ABF7A", fillOpacity: 0.6 });
-                } else {
-                  layer.setStyle({ fillColor: "white", fillOpacity: 0.4 });
                 }
               });
             }
@@ -66,7 +75,7 @@ const WorldMap: React.FC = () => {
         mapRef.current = null;
       }
     };
-  }, []);
+  }, [setCountryClicked, secretCountry]);
 
   return (
     <div id="map" style={{ height: '550px', width: '700px', borderRadius: '15px' }}></div>
