@@ -11,7 +11,8 @@ const CountryShapes: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://restcountries.com/v3.1/all');
+        const response = await axios.get('https://restcountries.com/v3.1/all?fields=name,population,region,area,flag');
+        
         const results = response.data.map((country: any) => ({
           name_country: country.name.common,
           superficie: country.area,
