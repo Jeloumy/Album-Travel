@@ -15,8 +15,8 @@ interface WorldMapProps {
 
 const WorldMap: React.FC<WorldMapProps> = ({ setCountryClicked, secretCountry, activePlay, setActivePlay, numberOfClicks, setNumberOfClicks }) => {
   const mapRef = useRef<L.Map | null>(null);
-  let lastCountryClicked = "";
-  let prevCount = 0;
+  const lastCountryClickedRef = useRef<string>("");
+  const prevCountRef = useRef<number>(0);
 
   useEffect(() => {
     const initializeMap = () => {
@@ -47,10 +47,10 @@ const WorldMap: React.FC<WorldMapProps> = ({ setCountryClicked, secretCountry, a
                 if (!activePlay) return; // Ignore clicks if the game is not active
 
                 console.log("Clicked on", feature.properties.name);
-                if (lastCountryClicked !== feature.properties.name) {
-                  lastCountryClicked = feature.properties.name;
-                  prevCount ++;
-                  setNumberOfClicks(prevCount);
+                if (lastCountryClickedRef.current !== feature.properties.name) {
+                  lastCountryClickedRef.current = feature.properties.name;
+                  prevCountRef.current++;
+                  setNumberOfClicks(prevCountRef.current);
                   if (feature.properties.name !== secretCountry?.name) {
                     layer.setStyle({ fillColor: "#FF7D5C", fillOpacity: 0.6 });
                   } else {

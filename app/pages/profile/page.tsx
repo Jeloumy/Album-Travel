@@ -1,4 +1,4 @@
-//app/pages/profile/page.tsx
+// app/pages/profile/page.tsx
 "use client"; // Indique que ce module est du code côté client
 
 import { useSession, signIn, signOut } from 'next-auth/react';
@@ -13,7 +13,7 @@ const ProfilePage = () => {
     if (status === 'unauthenticated') {
       router.push('/api/auth/signin');
     }
-  }, [status]);
+  }, [status, router]); // Ajout de router aux dépendances
 
   if (status === 'loading') {
     return <div>Loading...</div>;
