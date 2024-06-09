@@ -3,10 +3,10 @@
 
 import React, { useState,useEffect,useRef } from 'react';
 import dynamic from 'next/dynamic';
-import AnswerCube from '../components/answer-cube';
-import { Country } from '../types/country';
+import AnswerCube from '@/app/components/answer-cube';
+import { Country } from '../../../../app/types/country';
 
-const DynamicWorldMap = dynamic(() => import('../components/WorldMap'), {
+const DynamicWorldMap = dynamic(() => import('../../components/WorldMap'), {
   ssr: false
 });
 
@@ -21,7 +21,7 @@ const Home: React.FC = () => {
       const fetchRandomCountry = async () => {
         let randomCountry;
         try {
-          const response = await fetch("https://countryapi.io/api/all?apikey=LDs6saC8be44btzKGNvgqxGDwkqWBcXSlzBva4DR");
+          const response = await fetch("https://countryapi.io/api/all?apikey=qsgT6TVTtg353XJQdeI8uEADwD5YKrfYvwsim2PF&populationGreaterThan=100000");
           const data = await response.json();
           let population = 0;
           while (population < 100000){

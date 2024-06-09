@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L, { GeoJSON, LeafletMouseEvent } from 'leaflet';
 import axios from 'axios';
-import { Country } from '../../app/types/country';
+import { Country } from '../../../app/types/country';
 
 
 const WorldMap: React.FC<{ setCountryClicked: (country: any) => void; secretCountry: Country | null }> = ({ setCountryClicked, secretCountry }) => {
@@ -45,7 +45,7 @@ const WorldMap: React.FC<{ setCountryClicked: (country: any) => void; secretCoun
                 }
 
                 try {
-                  await axios.get(`https://countryapi.io/api/name/${feature.properties.name}?apikey=LDs6saC8be44btzKGNvgqxGDwkqWBcXSlzBva4DR`).then(
+                  await axios.get(`https://countryapi.io/api/name/${feature.properties.name}?apikey=qsgT6TVTtg353XJQdeI8uEADwD5YKrfYvwsim2PF`).then(
                     (countryResponse) => {
                       const countryKey = Object.keys(countryResponse.data)[0];
                       console.log(countryResponse.data[countryKey]);
