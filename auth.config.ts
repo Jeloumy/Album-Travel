@@ -1,3 +1,5 @@
+// auth.config.ts
+
 import type { NextAuthConfig } from 'next-auth';
 import credentials from 'next-auth/providers/credentials';
 export const authConfig = {

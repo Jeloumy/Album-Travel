@@ -1,10 +1,11 @@
-// src/pages/map.tsx
+// /app/home/page.tsx
 "use client";
 
 import React, { useState,useEffect,useRef } from 'react';
 import dynamic from 'next/dynamic';
 import AnswerCube from '../components/answer-cube';
 import { Country } from '../types/country';
+import HeaderNav  from '../ui/header-nav'
 
 const DynamicWorldMap = dynamic(() => import('../components/WorldMap'), {
   ssr: false
@@ -43,6 +44,7 @@ const Home: React.FC = () => {
 
   return (
     <div>
+      <HeaderNav/>
       <div className='w-full flex justify-center items-center my-8'>
         <h1>Voyager autour du monde</h1>
       </div>

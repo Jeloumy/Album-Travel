@@ -1,3 +1,4 @@
+//app/pages/profile/page.tsx
 "use client"; // Indique que ce module est du code côté client
 
 import { useSession, signIn, signOut } from 'next-auth/react';
