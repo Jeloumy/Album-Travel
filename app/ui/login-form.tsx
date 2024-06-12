@@ -1,13 +1,15 @@
 'use client';
- 
+
 import { inter } from '../ui/fonts';
 import { Button } from '../ui/button';
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '../lib/actions';
- 
+import { useRouter } from 'next/navigation';
+
 export default function LoginForm() {
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
- 
+  const router = useRouter();
+
   return (
     <form action={dispatch} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
@@ -31,7 +33,6 @@ export default function LoginForm() {
                 placeholder="Enter your email address"
                 required
               />
-            
             </div>
           </div>
           <div className="mt-4">
@@ -51,10 +52,17 @@ export default function LoginForm() {
                 required
                 minLength={6}
               />
-             </div>
+            </div>
           </div>
         </div>
         <LoginButton />
+        <button
+          type="button"
+          className="mt-4 w-full bg-blue-500 text-white py-2 rounded-md"
+          onClick={() => router.push('/register')}
+        >
+          Create Account
+        </button>
         <div
           className="flex h-8 items-end space-x-1"
           aria-live="polite"
@@ -62,7 +70,6 @@ export default function LoginForm() {
         >
           {errorMessage && (
             <>
-              
               <p className="text-sm text-red-500">{errorMessage}</p>
             </>
           )}
@@ -71,13 +78,13 @@ export default function LoginForm() {
     </form>
   );
 }
- 
+
 function LoginButton() {
   const { pending } = useFormStatus();
- 
+
   return (
     <Button className="mt-4 w-full" aria-disabled={pending}>
-      Log in 
+      Log in
     </Button>
   );
 }
