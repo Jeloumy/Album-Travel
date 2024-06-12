@@ -94,8 +94,8 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md">
+    <div className="flex justify-center items-center min-h-screen ">
+      <div className="w-full max-w-md p-8 space-y-6 rounded-xl border border-accent">
         <h1 className="text-2xl font-bold text-center">Create Account</h1>
         <form onSubmit={handleRegister} className="space-y-4">
           <div className="form-control">
@@ -135,7 +135,7 @@ const RegisterPage = () => {
             />
             {passwordStrength && (
               <div className="mt-2">
-                <div className="relative w-full h-2 rounded bg-gray-300">
+                <div className="relative w-full h-2 rounded ">
                   <div
                     className={`absolute h-full ${getProgressBarColor(passwordStrength.score)} rounded-l-full rounded-r-full transition-width`}
                     style={{ width: `${(passwordStrength.score + 1) * 20}%` }}
@@ -146,10 +146,20 @@ const RegisterPage = () => {
             {passwordError && <p className="text-red-500 mt-2">{passwordError}</p>}
           </div>
           <div className="flex justify-center">
-            <button type="submit" className="flex h-10 items-center rounded-lg bg-blue-500 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:bg-blue-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50">
+            <button type="submit" className="btn btn-primary">
               Create Account
             </button>
           </div>
+          <div className="flex gap-2 mt-4 w-full justify-center">
+          <p> J'ai déjà un compte</p>
+          <button
+            type="button"
+            className="text-primary"
+            onClick={() => router.push('/login')}
+          >
+            Se connecter
+          </button>
+        </div>
         </form>
       </div>
     </div>
