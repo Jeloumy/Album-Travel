@@ -38,3 +38,7 @@ h2{
 .map-container {
   border-radius: 10px; /* Vous pouvez ajuster ce nombre selon le degré de courbure souhaité */
 }
+
+.transition-width {
+  transition: width 0.5s ease;
+}
