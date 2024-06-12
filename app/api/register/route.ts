@@ -5,11 +5,11 @@ import bcrypt from 'bcrypt';
 export async function POST(request: Request) {
   try {
     // Parsing the request body
-    const { name, email, password } = await request.json();
+    const { name_user, email, password } = await request.json();
 
     // Check for missing fields
-    if (!name || !email || !password) {
-      console.error('Missing fields:', { name, email, password });
+    if (!name_user || !email || !password) {
+      console.error('Missing fields:', { name_user, email, password });
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
     }
 
@@ -26,8 +26,8 @@ export async function POST(request: Request) {
     // Inserting user into the database
     console.log('Inserting user into the database...');
     await client.sql`
-      INSERT INTO users (name, email, password)
-      VALUES (${name}, ${email}, ${hashedPassword})
+      INSERT INTO users (name_user, email, password)
+      VALUES (${name_user}, ${email}, ${hashedPassword})
     `;
     console.log('User inserted successfully.');
 

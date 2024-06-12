@@ -12,7 +12,7 @@ const ProfilePage = () => {
     if (status === 'unauthenticated') {
       router.push('/api/auth/signin');
     }
-  }, [status, router]); // Ajout de router aux dépendances
+  }, [status, router]);
 
   if (status === 'loading') {
     return <div>Loading...</div>;
@@ -37,4 +37,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage; // Assurez-vous qu'il y a un export par défaut
+export default ProfilePage;

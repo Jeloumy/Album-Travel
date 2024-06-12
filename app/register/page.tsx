@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 const RegisterPage = () => {
-  const [name, setNom] = useState('');
+  const [name_user, setNom] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
@@ -12,14 +12,14 @@ const RegisterPage = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log('Sending registration data:', { name, email, password });
+    console.log('Sending registration data:', { name_user, email, password });
 
     const res = await fetch('/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name_user, email, password }),
     });
 
     if (res.ok) {
@@ -35,11 +35,11 @@ const RegisterPage = () => {
       <h1>Create Account</h1>
       <form onSubmit={handleRegister}>
         <div>
-          <label htmlFor="name">Name</label>
+          <label htmlFor="name_user">name_user</label>
           <input
             type="text"
-            id="name"
-            value={name}
+            id="name_user"
+            value={name_user}
             onChange={(e) => setNom(e.target.value)}
           />
         </div>
