@@ -2,26 +2,43 @@
 
 import { inter } from '../ui/fonts';
 import { Button } from '../ui/button';
-import { useFormState, useFormStatus } from 'react-dom';
-import { authenticate } from '../lib/actions';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useFormStatus } from 'react-dom';
 
 export default function LoginForm() {
-  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    const result = await signIn('credentials', {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (result?.error) {
+      setErrorMessage(result.error);
+    } else {
+      router.push('/home'); // Rediriger vers la page d'accueil après connexion réussie
+    }
+  };
+
   return (
-    <form action={dispatch} className="space-y-3">
+    <form onSubmit={handleSubmit} className="space-y-3">
       <div className="flex-1 rounded-lg border border-accent px-6 pb-4 pt-8">
         <h1 className={`${inter.className} mb-3 text-2xl text-center`}>
           Connexion
         </h1>
         <div className="w-full">
           <div>
-            <label
-              className="mb-3 mt-5 block text-xs font-medium"
-              htmlFor="email"
-            >
+            <label className="mb-3 mt-5 block text-xs font-medium" htmlFor="email">
               Email
             </label>
             <div className="relative">
@@ -36,10 +53,7 @@ export default function LoginForm() {
             </div>
           </div>
           <div className="mt-4">
-            <label
-              className="mb-3 mt-5 block text-xs font-medium"
-              htmlFor="password"
-            >
+            <label className="mb-3 mt-5 block text-xs font-medium" htmlFor="password">
               Password
             </label>
             <div className="relative">
