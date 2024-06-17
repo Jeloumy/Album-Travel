@@ -1,3 +1,5 @@
+//app/ui/login-form.tsx
+
 'use client';
 
 import { inter } from '../ui/fonts';
@@ -76,7 +78,7 @@ export default function LoginForm() {
             className="text-primary"
             onClick={() => router.push('/register')}
           >
-            S&apos;inscrire
+            S&apos;incrire
           </button>
         </div>
 
