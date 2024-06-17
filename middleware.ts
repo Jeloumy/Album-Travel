@@ -1,11 +1,40 @@
 // middleware.ts
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
-import NextAuth from 'next-auth';
-import { authConfig } from './auth.config';
- 
-export default NextAuth(authConfig).auth;
- 
+export async function middleware(req: NextRequest) {
+  const secret = process.env.AUTH_SECRET;
+
+  if (!secret) {
+    throw new Error('AUTH_SECRET environment variable is not defined');
+  }
+
+  const token = await getToken({
+    req,
+    secret,
+    // Utilisez un sel par défaut ou définissez-le dans .env
+    salt: process.env.NEXTAUTH_SALT || 'default_salt',
+  });
+
+  const isAuthPage = req.nextUrl.pathname.startsWith('/login');
+  const isProtectedPage = !['/login', '/register', '/api/auth', '/api/register'].includes(req.nextUrl.pathname);
+
+  console.log(`Token: ${token}`);
+  console.log(`isAuthPage: ${isAuthPage}`);
+  console.log(`isProtectedPage: ${isProtectedPage}`);
+
+  if (isAuthPage && token) {
+    return NextResponse.redirect(new URL('/home', req.url));
+  }
+
+  if (isProtectedPage && !token) {
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
+
+  return NextResponse.next();
+}
+
 export const config = {
-  // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };
