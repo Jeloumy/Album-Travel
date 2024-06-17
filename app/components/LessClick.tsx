@@ -91,7 +91,7 @@ const LessClick: React.FC<LessClickProps> = ({
             <AnswerCube label="Population" colorClass="" info={countryClicked.population} dataCountrySecret={secretCountry.population} />
           </div>
           <div className='flex w-full gap-4 items-center justify-center'>
-            <h2>Nombre d'essais</h2>
+            <h2>Nombre d&apos;essais</h2>
             <p>{numberOfClick}</p>
           </div>
         </div>
