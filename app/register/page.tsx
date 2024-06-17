@@ -94,7 +94,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen ">
+    <div className="flex justify-center items-center min-h-screen">
       <div className="w-full max-w-md p-8 space-y-6 rounded-xl border border-accent">
         <h1 className="text-2xl font-bold text-center">Create Account</h1>
         <form onSubmit={handleRegister} className="space-y-4">
@@ -135,7 +135,7 @@ const RegisterPage = () => {
             />
             {passwordStrength && (
               <div className="mt-2">
-                <div className="relative w-full h-2 rounded ">
+                <div className="relative w-full h-2 rounded">
                   <div
                     className={`absolute h-full ${getProgressBarColor(passwordStrength.score)} rounded-l-full rounded-r-full transition-width`}
                     style={{ width: `${(passwordStrength.score + 1) * 20}%` }}
@@ -143,7 +143,7 @@ const RegisterPage = () => {
                 </div>
               </div>
             )}
-            {passwordError && <p className="text-red-500 mt-2">{passwordError}</p>}
+            {passwordError && <p className="text-red-500 mt-2 whitespace-pre-line">{passwordError}</p>}
           </div>
           <div className="flex justify-center">
             <button type="submit" className="btn btn-primary">
@@ -151,15 +151,15 @@ const RegisterPage = () => {
             </button>
           </div>
           <div className="flex gap-2 mt-4 w-full justify-center">
-          <p> J'ai déjà un compte</p>
-          <button
-            type="button"
-            className="text-primary"
-            onClick={() => router.push('/login')}
-          >
-            Se connecter
-          </button>
-        </div>
+            <p>J&apos;ai déjà un compte</p>
+            <button
+              type="button"
+              className="text-primary"
+              onClick={() => router.push('/login')}
+            >
+              Se connecter
+            </button>
+          </div>
         </form>
       </div>
     </div>

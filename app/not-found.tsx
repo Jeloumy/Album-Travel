@@ -1,5 +1,3 @@
-// app/not-found.tsx
-
 "use client";
 
 import { useEffect } from 'react';
@@ -27,7 +25,7 @@ const NotFoundPage = () => {
   return (
     <div>
       <h1>404 - Page Not Found</h1>
-      <p>Sorry, we couldn't find the page you're looking for.</p>
+      <p>Sorry, we couldn&apos;t find the page you&apos;re looking for.</p>
     </div>
   );
 };

@@ -1,5 +1,3 @@
-//app/ui/login-form.tsx
-
 'use client';
 
 import { inter } from '../ui/fonts';
@@ -72,13 +70,13 @@ export default function LoginForm() {
         </div>
         <LoginButton />
         <div className="flex gap-2 mt-4 w-full justify-center">
-          <p> Je n'ai pas de compte</p>
+          <p> Je n&apos;ai pas de compte</p>
           <button
             type="button"
             className="text-primary"
             onClick={() => router.push('/register')}
           >
-            S'incrire
+            S&apos;inscrire
           </button>
         </div>
 
