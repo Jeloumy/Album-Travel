@@ -151,15 +151,15 @@ const RegisterPage = () => {
             </button>
           </div>
           <div className="flex gap-2 mt-4 w-full justify-center">
-          <p> J'ai déjà un compte</p>
-          <button
-            type="button"
-            className="text-primary"
-            onClick={() => router.push('/login')}
-          >
-            Se connecter
-          </button>
-        </div>
+            <p> J&apos;ai déjà un compte</p>
+            <button
+              type="button"
+              className="text-primary"
+              onClick={() => router.push('/login')}
+            >
+              Se connecter
+            </button>
+          </div>
         </form>
       </div>
     </div>
