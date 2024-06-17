@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import AnswerCube from '../components/answer-cube';
 import { Country } from '../types/country';
-import HeaderNav  from '../ui/header-nav'
+import HeaderNav from '../ui/header-nav'
 import Sprint from '../components/Sprint';
 import LessClick from '../components/LessClick';
 
@@ -18,19 +18,11 @@ const Home: React.FC = () => {
   const [secretCountry, setSecretCountry] = useState<Country | null>(null);
   const [activePlay, setActivePlay] = useState<boolean>(false);
   const [numberOfClick, setNumberOfClick] = useState<number>(0);
-  const [gameMode, setGameMode]  = useState<null | 'Sprint' | 'Precision'>(null);
+  const [gameMode, setGameMode] = useState<null | 'Sprint' | 'Precision'>(null);
   const [victory, setVictory] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   if (!initialized.current) {
-  //     initialized.current = true;
-  //     setGameMode(null);
-  //     initializedTheGame();
-  //   }
-  // }, []);
-
   useEffect(() => {
-    if(activePlay){
+    if (activePlay) {
       setNumberOfClick(0);
       setCountryClicked(null);
       setSecretCountry(null);
@@ -53,56 +45,32 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          {!gameMode ?(
+          {!gameMode ? (
             <div className='grid grid-cols-2 gap-4 h-full'>
-            <div className='flex flex-col justify-center items-center p-8 border border-accent rounded gap-2'>
-              <h4 className="text-accent font-bold text-xl text-center">Sprint des Nations</h4>
-              <p className='text-center'>Trouvez le maximum de pays avant que le temps ne s'écoule.</p>
-              <button className="btn btn-outline btn-accent mt-2" onClick={() => setGameMode("Sprint")}>Jouer</button>
+              <div className='flex flex-col justify-center items-center p-8 border border-accent rounded gap-2'>
+                <h4 className="text-accent font-bold text-xl text-center">Sprint des Nations</h4>
+                <p className='text-center'>Trouvez le maximum de pays avant que le temps ne s&apos;écoule.</p>
+                <button className="btn btn-outline btn-accent mt-2" onClick={() => setGameMode("Sprint")}>Jouer</button>
+              </div>
+              <div className='flex flex-col justify-center items-center p-8 border border-accent rounded gap-2'>
+                <h4 className="text-accent font-bold text-xl">Défi de Précision</h4>
+                <p className='text-center'>Trouvez le pays secret avec le moins de clics et dans le minimum de temps.</p>
+                <button className="btn btn-outline btn-accent mt-2" onClick={() => setGameMode("Precision")}>Jouer</button>
+              </div>
             </div>
-            <div className='flex flex-col justify-center items-center p-8 border border-accent rounded gap-2'>
-              <h4 className="text-accent font-bold text-xl">Défi de Précision</h4>
-              <p className='text-center'>Trouvez le pays secret avec le moins de clics et dans le minimum de temps.</p>
-              <button className="btn btn-outline btn-accent mt-2" onClick={() => setGameMode("Precision")}>Jouer</button>
-            </div>
-          </div>
           ) : (
             <div className="p-4 border-2 border-neutral-content rounded h-full">
               <div className='flex justify-between items-center'>
                 <h2>Résultat</h2>
                 <button className="btn btn-secondary" onClick={() => { setGameMode(null); setActivePlay(false); setVictory(false) }}>Retour</button>
               </div>
-                {gameMode === 'Sprint' && <Sprint setCountryClicked={setCountryClicked} secretCountry={secretCountry} setSecretCountry={setSecretCountry} countryClicked={countryClicked} activePlay={activePlay} setActivePlay={setActivePlay} />}
-                {gameMode === 'Precision' && <LessClick setVictory={setVictory} victory={victory} setCountryClicked={setCountryClicked} secretCountry={secretCountry} setSecretCountry={setSecretCountry} countryClicked={countryClicked} activePlay={activePlay} setActivePlay={setActivePlay} numberOfClick={numberOfClick} setNumberOfClick={setNumberOfClick}/>}
+              {gameMode === 'Sprint' && <Sprint setCountryClicked={setCountryClicked} secretCountry={secretCountry} setSecretCountry={setSecretCountry} countryClicked={countryClicked} activePlay={activePlay} setActivePlay={setActivePlay} />}
+              {gameMode === 'Precision' && <LessClick setVictory={setVictory} victory={victory} setCountryClicked={setCountryClicked} secretCountry={secretCountry} setSecretCountry={setSecretCountry} countryClicked={countryClicked} activePlay={activePlay} setActivePlay={setActivePlay} numberOfClick={numberOfClick} setNumberOfClick={setNumberOfClick} />}
             </div>
-            )}
-
-
-
-
-          {/* <div className="p-4 border-2 border-neutral-content rounded">
-            <h2>Résultat</h2>
-            {countryClicked && secretCountry && (
-              <div className="flex gap justify-around mt-4">
-                <AnswerCube label="Superficie" colorClass="" info={countryClicked.area} dataCountrySecret={secretCountry.area} />
-                <AnswerCube label="Continent" colorClass="" info={countryClicked.region} dataCountrySecret={secretCountry.region} />
-                <AnswerCube label="Région" colorClass="" info={countryClicked.subregion} dataCountrySecret={secretCountry.subregion} />
-                <AnswerCube label="Population" colorClass="" info={countryClicked.population} dataCountrySecret={secretCountry.population} />
-              </div>
-            )}
-            {!activePlay && secretCountry &&(
-              <div className="flex gap-4 mt-4">
-                <div>
-                  <h1>Victoire !</h1>
-                  <p>Le pays a deviné était bien {secretCountry.name}; Vous avez réussi en {numberOfClick} essais</p>
-                </div>
-                <button className="bg-primary text-neutral py-2 px-4 rounded" onClick={initializedTheGame}>Rejouer</button>
-              </div>
-            )}
-          </div> */}
+          )}
         </div>
         <div className="w-full max-w-1/2">
-          <DynamicWorldMap setVictory={setVictory} victory={victory} setCountryClicked={setCountryClicked} secretCountry={secretCountry} activePlay={activePlay} setActivePlay={setActivePlay} numberOfClick={numberOfClick} setNumberOfClick={setNumberOfClick}/>
+          <DynamicWorldMap setVictory={setVictory} victory={victory} setCountryClicked={setCountryClicked} secretCountry={secretCountry} activePlay={activePlay} setActivePlay={setActivePlay} numberOfClick={numberOfClick} setNumberOfClick={setNumberOfClick} />
         </div>
       </div>
     </div>

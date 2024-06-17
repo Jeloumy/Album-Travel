@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Country } from '../types/country';
 import AnswerCube from '../components/answer-cube';
 import { setSecret } from '../utils/secretCountry';
@@ -27,7 +27,7 @@ const Sprint: React.FC<SprintProps> = ({
 
   const initialized = useRef(false);
 
-  const startGame = async () => {
+  const startGame = useCallback(async () => {
     setListOfCountries([]);
     setCountryClicked(null);
     setActivePlay(true);
@@ -40,8 +40,7 @@ const Sprint: React.FC<SprintProps> = ({
     } catch (error) {
       console.error("Error initializing the game:", error);
     }
-    
-  };
+  }, [setCountryClicked, setActivePlay, setSecretCountry]);
 
   // Initialiser le jeu
   useEffect(() => {
@@ -56,10 +55,10 @@ const Sprint: React.FC<SprintProps> = ({
 
     // Clean up timer on unmount or game end
     return () => clearInterval(timer);
-  }, []);
+  }, [startGame]);
 
   // Test si le pays cliqué est le pays secret
-  const handleCountryClicked = async () => {
+  const handleCountryClicked = useCallback(async () => {
     if (countryClicked && secretCountry) {
       if (countryClicked.name === secretCountry.name) {
         console.log("Victoire");
@@ -69,7 +68,7 @@ const Sprint: React.FC<SprintProps> = ({
         console.log('Secret country:', secret);
       }
     }
-  };
+  }, [countryClicked, secretCountry, setListOfCountries, setSecretCountry]);
 
   useEffect(() => {
     handleCountryClicked();
@@ -82,7 +81,7 @@ const Sprint: React.FC<SprintProps> = ({
         }, 1000);
       }, 100);
       return () => clearTimeout(deductionTimer);
-    }else if(countryClicked && countryClicked.name === secretCountry?.name){
+    } else if (countryClicked && countryClicked.name === secretCountry?.name) {
       setTimeLeft(prevTime => Math.max(prevTime + 10, 0));
       const additionTimer = setTimeout(() => {
         setTimeAddition(+10);
@@ -92,7 +91,7 @@ const Sprint: React.FC<SprintProps> = ({
       }, 100);
       return () => clearTimeout(additionTimer);
     }
-  }, [countryClicked]);
+  }, [countryClicked, secretCountry?.name, handleCountryClicked]);
 
   useEffect(() => {
     if (timeLeft === 0) {
@@ -138,7 +137,7 @@ const Sprint: React.FC<SprintProps> = ({
         {timeLeft <= 0 && (
           <div className="mt-4 flex flex-col items-center justify-center h-full w-full">
             <h2 className='mb-4'>Temps écoulé !</h2>
-            <p className='mb-4'>Nombre de pays trouvé dans le temps imparti <span className="text-accent">{listOfCountries.length}</span></p>
+            <p className='mb-4'>Nombre de pays trouvés dans le temps imparti <span className="text-accent">{listOfCountries.length}</span></p>
             
             <div className='grid grid-cols-4 w-full mb-4'>
               {listOfCountries.map((country, index) => (
