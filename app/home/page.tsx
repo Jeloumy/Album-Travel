@@ -1,14 +1,13 @@
-// /app/home/page.tsx
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import AnswerCube from '../components/answer-cube';
 import { Country } from '../types/country';
-import HeaderNav  from '../ui/header-nav'
+import HeaderNav from '../ui/header-nav';
 
 const DynamicWorldMap = dynamic(() => import('../components/WorldMap'), {
-  ssr: false
+  ssr: false,
 });
 
 const Home: React.FC = () => {
@@ -50,10 +49,7 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <HeaderNav/>
-      {/* <div className='w-full flex justify-center items-center my-8'>
-        <h1>Voyager autour du monde</h1>
-      </div> */}
+      <HeaderNav />
       <div className='w-full flex gap-8'>
         <div className='bg-neutral w-3/4 rounded-[15px] p-6 flex flex-col gap-4'>
           <div className="p-4 border-2 border-neutral-content rounded">

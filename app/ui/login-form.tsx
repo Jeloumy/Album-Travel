@@ -2,31 +2,24 @@
 
 import { inter } from '../ui/fonts';
 import { Button } from '../ui/button';
-import { signIn } from 'next-auth/react';
+import { useFormState, useFormStatus } from 'react-dom';
+import { authenticate } from '../lib/actions';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useFormStatus } from 'react-dom';
 
 export default function LoginForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const email = form.email.value;
-    const password = form.password.value;
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const error = await authenticate(undefined, formData);
 
-    const result = await signIn('credentials', {
-      redirect: false,
-      email,
-      password,
-    });
-
-    if (result?.error) {
-      setErrorMessage(result.error);
+    if (error) {
+      setErrorMessage(error);
     } else {
-      router.push('/home'); // Rediriger vers la page d'accueil après connexion réussie
+      router.push('/home');
     }
   };
 
@@ -38,7 +31,10 @@ export default function LoginForm() {
         </h1>
         <div className="w-full">
           <div>
-            <label className="mb-3 mt-5 block text-xs font-medium" htmlFor="email">
+            <label
+              className="mb-3 mt-5 block text-xs font-medium"
+              htmlFor="email"
+            >
               Email
             </label>
             <div className="relative">
@@ -53,7 +49,10 @@ export default function LoginForm() {
             </div>
           </div>
           <div className="mt-4">
-            <label className="mb-3 mt-5 block text-xs font-medium" htmlFor="password">
+            <label
+              className="mb-3 mt-5 block text-xs font-medium"
+              htmlFor="password"
+            >
               Password
             </label>
             <div className="relative">
@@ -87,9 +86,7 @@ export default function LoginForm() {
           aria-atomic="true"
         >
           {errorMessage && (
-            <>
-              <p className="text-sm text-red-500">{errorMessage}</p>
-            </>
+            <p className="text-sm text-red-500">{errorMessage}</p>
           )}
         </div>
       </div>
