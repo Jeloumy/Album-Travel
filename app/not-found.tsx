@@ -9,6 +9,9 @@ const NotFoundPage = () => {
   const router = useRouter();
 
   useEffect(() => {
+    console.log('Session:', session);
+    console.log('Status:', status);
+
     if (status === 'unauthenticated') {
       router.push('/login');
     }
