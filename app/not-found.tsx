@@ -5,20 +5,20 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
 const NotFoundPage = () => {
-  const { status } = useSession();
+  const session = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
+    if (session.status === 'unauthenticated') {
       router.push('/login');
     }
-  }, [status, router]);
+  }, [session.status, router]);
 
-  if (status === 'loading') {
+  if (session.status === 'loading') {
     return <div>Loading...</div>;
   }
 
-  if (status === 'unauthenticated') {
+  if (session.status === 'unauthenticated') {
     return <div>Redirecting...</div>;
   }
 
