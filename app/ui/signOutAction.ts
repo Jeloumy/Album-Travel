@@ -1,4 +1,4 @@
-// signOutAction.js
+// signOutAction.ts
 
 'use server';
 

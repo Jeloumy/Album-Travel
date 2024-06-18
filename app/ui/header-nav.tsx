@@ -6,7 +6,13 @@ export default function SideNav() {
   const router = useRouter();
 
   const onSignOut = async () => {
+    // Supprime les données de l'utilisateur du localStorage
+    localStorage.removeItem('user');
+    
+    // Exécute l'action de déconnexion
     await handleSignOut();
+
+    // Redirige l'utilisateur vers la page de connexion
     router.push('/login');
   };
 
@@ -23,7 +29,7 @@ export default function SideNav() {
         </Link>
       </div>
         <form
-          action={onSignOut}
+          onSubmit={(e) => { e.preventDefault(); onSignOut(); }}
         >
           <button className="text-accent">
             <div className="hidden md:block">Sign Out</div>

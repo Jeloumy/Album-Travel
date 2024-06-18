@@ -63,7 +63,7 @@ async function createCountriesTable(client) {
         id_country UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         name VARCHAR(50) NOT NULL UNIQUE,
         area FLOAT NOT NULL,
-        population VARCHAR(50) NOT NULL,
+        population INT NOT NULL,
         region VARCHAR(50) NOT NULL,
         subregion VARCHAR(50) NOT NULL
       );
@@ -126,7 +126,7 @@ async function seedCountries(client) {
           VALUES (
             ${country.name}, 
             ${parseFloat(country.area)}, 
-            ${country.population.toString()}, 
+            ${country.population}, 
             ${country.region}, 
             ${country.subregion}
           )
