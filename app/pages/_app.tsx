@@ -1,12 +1,12 @@
-// pages/_app.tsx
-import { SessionProvider } from 'next-auth/react';
-import type { AppProps } from 'next/app';
+// app/pages/_app.tsx
+import { AppProps } from 'next/app';
+import { UserProvider } from '../context/UserContext';
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <SessionProvider session={session}>
+    <UserProvider>
       <Component {...pageProps} />
-    </SessionProvider>
+    </UserProvider>
   );
 }
 

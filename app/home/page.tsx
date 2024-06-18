@@ -1,25 +1,29 @@
-"use client";
+//app/home/page.tsx
 
-import React, { useState, useEffect, useRef } from 'react';
+'use client';
+
+
+import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import AnswerCube from '../components/answer-cube';
 import { Country } from '../types/country';
-import HeaderNav from '../ui/header-nav'
+import HeaderNav from '../ui/header-nav';
 import Sprint from '../components/Sprint';
 import LessClick from '../components/LessClick';
+import { useUser } from '../context/UserContext';
 
 const DynamicWorldMap = dynamic(() => import('../components/WorldMap'), {
   ssr: false,
 });
 
 const Home: React.FC = () => {
-  const initialized = useRef(false);
   const [countryClicked, setCountryClicked] = useState<Country | null>(null);
   const [secretCountry, setSecretCountry] = useState<Country | null>(null);
   const [activePlay, setActivePlay] = useState<boolean>(false);
   const [numberOfClick, setNumberOfClick] = useState<number>(0);
   const [gameMode, setGameMode] = useState<null | 'Sprint' | 'Precision'>(null);
   const [victory, setVictory] = useState<boolean>(false);
+  const { user } = useUser(); // Utilisez le contexte pour accéder aux informations de l'utilisateur
 
   useEffect(() => {
     if (activePlay) {
@@ -73,6 +77,12 @@ const Home: React.FC = () => {
           <DynamicWorldMap setVictory={setVictory} victory={victory} setCountryClicked={setCountryClicked} secretCountry={secretCountry} activePlay={activePlay} setActivePlay={setActivePlay} numberOfClick={numberOfClick} setNumberOfClick={setNumberOfClick} />
         </div>
       </div>
+      {user && (
+        <div className="p-4 border-2 border-neutral-content rounded mt-4">
+          <h2>Bienvenue, {user.name}!</h2>
+          <p>Email: {user.email}</p>
+        </div>
+      )}
     </div>
   );
 };
