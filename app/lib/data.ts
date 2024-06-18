@@ -64,7 +64,7 @@ export async function fetchPrecisionScore() {
     SELECT p.*, u.username
     FROM precisions p
     JOIN users u ON p.id_user = u.id_user
-    ORDER BY nb_click ASC, duration_of_game ASC`;
+    ORDER BY nb_click DESC, duration_of_game ASC`;
     return data.rows as Precisions[];
   } catch (error) {
     console.error('Database Error:', error);
