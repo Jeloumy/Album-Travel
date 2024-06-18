@@ -1,9 +1,32 @@
 "use client";
 
-import React from 'react';
-import HeaderNav from '../ui/header-nav'
+import React, { useEffect, useState } from 'react';
+import HeaderNav from '../ui/header-nav';
+import { fetchSprintScore, fetchPrecisionScore } from '../lib/data';
+import { useUser } from '../context/UserContext';
+import {Sprints, Precisions} from '../lib/definitions';
+
 
 const Score: React.FC = () => {
+  const [sprintScore, setSprintScore] = useState<Sprints[]>([]);
+  const [precisionScore, setPrecisionScore] = useState<Precisions[]>([]);
+  const { user } = useUser(); // Assuming useUser returns user context
+
+  useEffect(() => {
+    const getSprintScore = async () => {
+      const sprintData = await fetchSprintScore();
+      setSprintScore(sprintData);
+    };
+
+    const getPrecisionScore = async () => {
+      const precisionData = await fetchPrecisionScore();
+      setPrecisionScore(precisionData);
+    };
+
+    getSprintScore();
+    getPrecisionScore();
+  }, []);
+
   return (
     <div>
       <HeaderNav />
@@ -21,20 +44,15 @@ const Score: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>User A</td>
-                <td>100</td>
-                <td>2</td>
-                <td>2022-01-01</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>User B</td>
-                <td>90</td>
-                <td>1</td>
-                <td>2022-01-02</td>
-              </tr>
+              {sprintScore.map((sprint, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{sprint.username}</td>
+                  <td>{sprint.nb_secret_find}</td>
+                  <td>{sprint.nb_penalities}</td>
+                  <td>{new Date(sprint.score_date).toLocaleDateString()}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -51,20 +69,15 @@ const Score: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>User C</td>
-                <td>30s</td>
-                <td>5</td>
-                <td>2022-01-03</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>User D</td>
-                <td>40s</td>
-                <td>7</td>
-                <td>2022-01-04</td>
-              </tr>
+              {precisionScore.map((precision, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{precision.username}</td>
+                  <td>{`${Math.floor(precision.duration_of_game / 60)}:${precision.duration_of_game  % 60 < 10 ? `0${precision.duration_of_game  % 60}` : precision.duration_of_game  % 60}`}</td>
+                  <td>{precision.nb_click}</td>
+                  <td>{new Date(precision.score_date).toLocaleDateString()}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

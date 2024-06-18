@@ -7,10 +7,11 @@ export async function setSecret(): Promise<Countries> {
     let data = await fetchCountries(); // Add await here
     
     let population = 0;
-    while (!randomCountry || population < 100000) { // Adjusted loop condition
+    while (!randomCountry || population < 200000) { // Adjusted loop condition
       const countries = Object.keys(data);
       const randomIndex = Math.floor(Math.random() * countries.length);
       randomCountry = data[randomIndex];
+      console.log('Random Countries:', randomCountry)
       if(randomCountry) {
         population = randomCountry?.population;
       }
