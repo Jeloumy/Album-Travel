@@ -25,6 +25,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ setCountryClicked, secretCountry, a
 
   useEffect(() => {
     const initializeMap = () => {
+      lastCountryClickedRef.current = "";
       if (mapRef.current === null) {
         mapRef.current = L.map('map').setView([30.505, -0.09], 2);
         L.tileLayer(
