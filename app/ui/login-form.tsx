@@ -1,10 +1,8 @@
-//app/ui/login-form.tsx
-
 'use client';
 
 import { inter } from '../ui/fonts';
 import { Button } from '../ui/button';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 import { authenticate } from '../lib/actions';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -78,7 +76,7 @@ export default function LoginForm() {
             className="text-primary"
             onClick={() => router.push('/register')}
           >
-            S&apos;incrire
+            S&apos;inscrire
           </button>
         </div>
 

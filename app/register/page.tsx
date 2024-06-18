@@ -151,7 +151,7 @@ const RegisterPage = () => {
             </button>
           </div>
           <div className="flex gap-2 mt-4 w-full justify-center">
-            <p>J&apos;ai déjà un compte</p>
+            <p> J&apos;ai déjà un compte</p>
             <button
               type="button"
               className="text-primary"

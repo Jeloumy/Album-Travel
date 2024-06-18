@@ -1,36 +1,18 @@
-"use client";
+'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
-const NotFoundPage = () => {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    console.log('Session:', session);
-    console.log('Status:', status);
-
-    if (status === 'unauthenticated') {
-      router.push('/login');
-    }
-  }, [status, router]);
-
-  if (status === 'loading') {
-    return <div>Loading...</div>;
-  }
-
-  if (status === 'unauthenticated') {
-    return <div>Redirecting...</div>;
-  }
-
+export default function NotFound() {
   return (
-    <div>
-      <h1>404 - Page Not Found</h1>
-      <p>Sorry, we couldn&apos;t find the page you&apos;re looking for.</p>
-    </div>
+    <main className="flex h-full flex-col items-center justify-center gap-2">
+      <h2 className="text-xl font-semibold">404 Not Found</h2>
+      <p>Could not find the requested invoice.</p>
+      <Link
+        href="/home"
+        className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400"
+      >
+        Go Back
+      </Link>
+    </main>
   );
-};
-
-export default NotFoundPage;
+}
