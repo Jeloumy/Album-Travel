@@ -4,7 +4,7 @@ import { sql } from '@vercel/postgres';
 
 const getUserByEmail = async (email: string) => {
   const { rows } = await sql`
-    SELECT id, name_user, email FROM Users WHERE email = ${email};
+    SELECT id_user, username, email FROM Users WHERE email = ${email};
   `;
   return rows[0];
 };
@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ message: 'User not found' });
     }
 
-    return res.status(200).json({ id: user.id, name: user.name_user, email: user.email });
+    return res.status(200).json({ id: user.id_user, name: user.username, email: user.email });
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error' });
   }
