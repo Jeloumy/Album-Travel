@@ -8,9 +8,7 @@ import { Countries} from '../lib/definitions';
 import HeaderNav from '../ui/header-nav';
 import Sprint from '../components/Sprint';
 import LessClick from '../components/LessClick';
-import { fetchCountries } from '../lib/data';
-import { User, Countries } from '../lib/definitions';
-import { Country } from '../types/country';
+import { useUser } from '../context/UserContext';
 
 const DynamicWorldMap = dynamic(() => import('../components/WorldMap'), {
   ssr: false,
@@ -24,58 +22,16 @@ const Home: React.FC = () => {
   const [numberOfClick, setNumberOfClick] = useState<number>(0);
   const [gameMode, setGameMode] = useState<null | 'Sprint' | 'Precision'>(null);
   const [victory, setVictory] = useState<boolean>(false);
-  const [user, setUser] = useState<{ id: string; name: string; email: string } | null>(null);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+  const { user } = useUser(); // Utilisez le contexte pour accéder aux informations de l'utilisateur
 
   useEffect(() => {
     if (activePlay) {
       setNumberOfClick(0);
       setCountryClicked(null);
       setSecretCountry(null);
-      console.log("test");
+      console.log("test")
     }
   }, [activePlay]);
-
-  useEffect(() => {
-    const loadCountries = async () => {
-      try {
-        const countriesData: Countries[] = await fetchCountries();
-        if (countriesData && countriesData.length > 0) {
-          const mappedCountries: Country[] = countriesData.map((country) => ({
-            name: country.name,
-            population: country.population,
-            subregion: country.subregion,
-            region: country.region,
-            area: country.area,
-            type: 'country', // initialiser selon les besoins
-            properties: {
-              name: country.name, // Assurez-vous que cela correspond à votre type CountryProperties
-              // autres propriétés si nécessaire
-            },
-            geometry: {
-              type: 'Point', // initialiser selon les besoins
-              coordinates: [] // initialiser selon les besoins
-            },
-            flag: '' // initialiser selon les besoins
-          }));
-          setCountries(mappedCountries);
-          console.log("Pays en bdd", mappedCountries);
-        } else {
-          console.error('No countries data found');
-        }
-      } catch (error) {
-        console.error("Failed to fetch countries:", error);
-      }
-    };
-
-    loadCountries();
-  }, []);
 
   return (
     <div>
@@ -123,7 +79,6 @@ const Home: React.FC = () => {
       {user && (
         <div className="p-4 border-2 border-neutral-content rounded mt-4">
           <h2>Bienvenue, {user.name}!</h2>
-          <p>ID: {user.id}</p>
           <p>Email: {user.email}</p>
         </div>
       )}
