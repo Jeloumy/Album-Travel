@@ -50,7 +50,6 @@ const RegisterPage = () => {
       return;
     }
 
-    console.log('Sending registration data:', { username, email, password });
 
     const res = await fetch('/api/register', {
       method: 'POST',

@@ -28,10 +28,6 @@ export default function LoginForm() {
         if (response.ok) {
           const data = await response.json();
           setUser(data); // Stocker les informations de l'utilisateur dans le contexte
-          
-          // Stocker les informations de l'utilisateur dans le localStorage
-          localStorage.setItem('user', JSON.stringify(data));
-          
           router.push('/home');
         } else {
           setErrorMessage('Failed to fetch user data');
