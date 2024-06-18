@@ -12,7 +12,7 @@ import { useUser } from '../context/UserContext';
 export default function LoginForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
-  const { setUser } = useUser(); // Utilisez le contexte pour stocker les informations de l'utilisateur
+  const { setUser } = useUser();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -24,11 +24,14 @@ export default function LoginForm() {
     } else {
       const email = formData.get('email') as string;
       try {
-        // Récupérer les informations de l'utilisateur depuis l'API
         const response = await fetch(`/api/user?email=${email}`);
         if (response.ok) {
           const data = await response.json();
           setUser(data); // Stocker les informations de l'utilisateur dans le contexte
+          
+          // Stocker les informations de l'utilisateur dans le localStorage
+          localStorage.setItem('user', JSON.stringify(data));
+          
           router.push('/home');
         } else {
           setErrorMessage('Failed to fetch user data');

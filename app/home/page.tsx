@@ -1,7 +1,5 @@
-//app/home/page.tsx
-
+// app/home/page.tsx
 'use client';
-
 
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
@@ -10,7 +8,6 @@ import { Country } from '../types/country';
 import HeaderNav from '../ui/header-nav';
 import Sprint from '../components/Sprint';
 import LessClick from '../components/LessClick';
-import { useUser } from '../context/UserContext';
 
 const DynamicWorldMap = dynamic(() => import('../components/WorldMap'), {
   ssr: false,
@@ -23,7 +20,14 @@ const Home: React.FC = () => {
   const [numberOfClick, setNumberOfClick] = useState<number>(0);
   const [gameMode, setGameMode] = useState<null | 'Sprint' | 'Precision'>(null);
   const [victory, setVictory] = useState<boolean>(false);
-  const { user } = useUser(); // Utilisez le contexte pour accéder aux informations de l'utilisateur
+  const [user, setUser] = useState<{ id: string; name: string; email: string } | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   useEffect(() => {
     if (activePlay) {
@@ -80,6 +84,7 @@ const Home: React.FC = () => {
       {user && (
         <div className="p-4 border-2 border-neutral-content rounded mt-4">
           <h2>Bienvenue, {user.name}!</h2>
+          <p>ID: {user.id}</p>
           <p>Email: {user.email}</p>
         </div>
       )}
