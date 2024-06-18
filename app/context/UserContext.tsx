@@ -3,21 +3,21 @@
 
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
-interface User {
+interface Users {
   id: string;
   name: string;
   email: string;
 }
 
 interface UserContextType {
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  user: Users | null;
+  setUser: React.Dispatch<React.SetStateAction<Users | null>>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Users | null>(null);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

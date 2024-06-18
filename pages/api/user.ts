@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const user = await getUserByEmail(email);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: ' not found' });
     }
 
     return res.status(200).json({ id: user.id_user, name: user.username, email: user.email });
