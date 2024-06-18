@@ -3,11 +3,13 @@ import 'leaflet/dist/leaflet.css';
 import L, { GeoJSON } from 'leaflet';
 import axios from 'axios';
 import { Country } from '../types/country';
+import { Countries } from '../lib/definitions';
+import {fetchCountry} from '../lib/data';
 
 interface WorldMapProps {
   setCountryClicked: (country: any) => void;
   setActivePlay: (active: boolean) => void;
-  secretCountry: Country | null;
+  secretCountry: Countries | null;
   activePlay: boolean;
   numberOfClick: number;
   setNumberOfClick: (number: number) => void;
@@ -48,7 +50,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ setCountryClicked, secretCountry, a
             onEachFeature: function (feature, layer: GeoJSON) {
               // Click on a country
               layer.on('click', async function () { 
-                if (!activePlay) return; // Ignore clicks if the game is not active
+                if (!activePlay) return; 
 
                 console.log("Clicked on", feature.properties.name);
 
@@ -63,15 +65,9 @@ const WorldMap: React.FC<WorldMapProps> = ({ setCountryClicked, secretCountry, a
                   }
 
                   try {
-                    await axios.get(`https://countryapi.io/api/name/${feature.properties.name}?apikey=${process.env.NEXT_PUBLIC_API_KEY}`).then(
-                      (countryResponse) => {
-                        const countryKey = Object.keys(countryResponse.data)[0];
-                        console.log(countryResponse.data[countryKey]);
-                        setCountryClicked(countryResponse.data[countryKey]);
-                      }).catch(error => {
-                        console.error("Error fetching country data:", error);
-                      }
-                    );
+                    let data = await fetchCountry(feature.properties.name);
+                    setCountryClicked(data[0]);
+                    console.log("Country data:", data[0].area);
                   } catch (error) {
                     console.error("Error fetching country data:", error);
                   }

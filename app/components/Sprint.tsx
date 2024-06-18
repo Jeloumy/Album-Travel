@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Country } from '../types/country';
+import { Countries} from '../lib/definitions';
 import AnswerCube from '../components/answer-cube';
 import { setSecret } from '../utils/secretCountry';
+import {insertSprintScore} from '../lib/data';
+import { useUser } from '../context/UserContext';
+
 
 interface SprintProps {
-  setCountryClicked: (country: Country | null) => void;
+  setCountryClicked: (country: Countries | null) => void;
   setActivePlay: (active: boolean) => void;
-  secretCountry: Country | null;
+  secretCountry: Countries | null;
   activePlay: boolean;
-  countryClicked: Country | null;
-  setSecretCountry: (country: Country | null) => void;
+  countryClicked: Countries | null;
+  setSecretCountry: (country: Countries | null) => void;
 }
 
 const Sprint: React.FC<SprintProps> = ({
@@ -23,7 +26,10 @@ const Sprint: React.FC<SprintProps> = ({
   const [timeLeft, setTimeLeft] = useState(90); // 90 seconds = 1m30s
   const [timeDeduction, setTimeDeduction] = useState<number | null>(null);
   const [timeAddition, setTimeAddition] = useState<number | null>(null);
-  const [listOfCountries, setListOfCountries] = useState<Country[]>([]);
+  const [listOfCountries, setListOfCountries] = useState<Countries[]>([]);
+  const[nbPenalities, setNbPenalities] = useState(0);
+
+  const { user } = useUser();
 
   const initialized = useRef(false);
 
@@ -32,6 +38,7 @@ const Sprint: React.FC<SprintProps> = ({
     setCountryClicked(null);
     setActivePlay(true);
     setTimeLeft(90);
+    setNbPenalities(0);
     try {
       console.log("Initializing the game...");
       const secret = await setSecret(); // Wait for the promise to resolve
@@ -74,6 +81,7 @@ const Sprint: React.FC<SprintProps> = ({
     handleCountryClicked();
     if (countryClicked && countryClicked.name !== secretCountry?.name) {
       setTimeLeft(prevTime => Math.max(prevTime - 5, 0));
+      setNbPenalities(prevPenalities => prevPenalities + 1);
       const deductionTimer = setTimeout(() => {
         setTimeDeduction(-5);
         setTimeout(() => {
@@ -96,6 +104,10 @@ const Sprint: React.FC<SprintProps> = ({
   useEffect(() => {
     if (timeLeft === 0) {
       setActivePlay(false);
+      if(user){
+        console.log(listOfCountries.length,nbPenalities,user.id);
+        insertSprintScore(listOfCountries.length, nbPenalities, user.id);
+      }
     }
   }, [timeLeft, setActivePlay]);
 
@@ -137,7 +149,7 @@ const Sprint: React.FC<SprintProps> = ({
         {timeLeft <= 0 && (
           <div className="mt-4 flex flex-col items-center justify-center h-full w-full">
             <h2 className='mb-4'>Temps écoulé !</h2>
-            <p className='mb-4'>Nombre de pays trouvés dans le temps imparti <span className="text-accent">{listOfCountries.length}</span></p>
+            <p className='mb-4'>Nombre de pays trouvés dans le temps imparti <span className="text-accent">{listOfCountries.length}</span> avec <span className="text-secondary">{nbPenalities}</span> penalités</p>
             
             <div className='grid grid-cols-4 w-full mb-4'>
               {listOfCountries.map((country, index) => (

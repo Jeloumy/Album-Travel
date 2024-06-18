@@ -4,21 +4,19 @@ export interface CountryProperties {
   [key: string]: any;
 }
 
-export interface Country {
-  type: string;
-  properties: CountryProperties;
-  geometry: {
-    type: string;
-    coordinates: any;
-  };
+export type Country = {
   name: string;
   population: number;
   subregion: string;
   region: string;
-  flag : {
-    small: string;
-    large: string;
-    medium: string;
-  };
   area: number;
-}
+  type: string;
+  properties: {
+    name: string;
+  };
+  geometry: {
+    type: string;
+    coordinates: any; // ajustez le type selon vos besoins
+  };
+  flag: string;
+};

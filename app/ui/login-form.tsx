@@ -1,3 +1,4 @@
+// app/ui/login-form.tsx
 'use client';
 
 import { inter } from '../ui/fonts';
@@ -6,10 +7,12 @@ import { useFormStatus } from 'react-dom';
 import { authenticate } from '../lib/actions';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useUser } from '../context/UserContext';
 
 export default function LoginForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
+  const { setUser } = useUser();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -19,7 +22,20 @@ export default function LoginForm() {
     if (error) {
       setErrorMessage(error);
     } else {
-      router.push('/home');
+      const email = formData.get('email') as string;
+      try {
+        const response = await fetch(`/api/user?email=${email}`);
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data); // Stocker les informations de l'utilisateur dans le contexte
+          router.push('/home');
+        } else {
+          setErrorMessage('Failed to fetch user data');
+        }
+      } catch (err) {
+        console.error('Failed to fetch user data:', err);
+        setErrorMessage('Failed to fetch user data');
+      }
     }
   };
 

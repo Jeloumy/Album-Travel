@@ -24,7 +24,7 @@ const validatePassword = (password: string) => {
 };
 
 const RegisterPage = () => {
-  const [name_user, setNom] = useState<string>('');
+  const [username, setNom] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordStrength, setPasswordStrength] = useState<ZXCVBNScore | null>(null);
@@ -50,14 +50,13 @@ const RegisterPage = () => {
       return;
     }
 
-    console.log('Sending registration data:', { name_user, email, password });
 
     const res = await fetch('/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name_user, email, password }),
+      body: JSON.stringify({ username, email, password }),
     });
 
     if (res.ok) {
@@ -99,13 +98,13 @@ const RegisterPage = () => {
         <h1 className="text-2xl font-bold text-center">Create Account</h1>
         <form onSubmit={handleRegister} className="space-y-4">
           <div className="form-control">
-            <label htmlFor="name_user" className="label">
+            <label htmlFor="username" className="label">
               <span className="label-text">Name</span>
             </label>
             <input
               type="text"
-              id="name_user"
-              value={name_user}
+              id="username"
+              value={username}
               onChange={(e) => setNom(e.target.value)}
               className="input input-bordered w-full"
             />

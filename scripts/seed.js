@@ -1,86 +1,204 @@
 require('dotenv').config(); // Charger les variables d'environnement
 
 const { db } = require('@vercel/postgres');
-const { users } = require('../app/lib/placeholder-data'); // Assurez-vous que ce chemin est correct
-const bcrypt = require('bcrypt');
+const fetch = require('node-fetch');
 
-async function seedDatabase(client) {
-  // Créer les tables
-  await client.sql`
-    DROP TABLE IF EXISTS Score;
-    DROP TABLE IF EXISTS Country;
-    DROP TABLE IF EXISTS Langues;
-    DROP TABLE IF EXISTS continents;
-    DROP TABLE IF EXISTS Users;
-    
-    CREATE TABLE Users (
-      id SERIAL PRIMARY KEY,
-      name_user VARCHAR(50) NOT NULL,
-      email VARCHAR(100) UNIQUE NOT NULL,
-      password TEXT NOT NULL
+async function dropTables(client) {
+  try {
+    await client.sql`DROP TABLE IF EXISTS precisions CASCADE`;
+    await client.sql`DROP TABLE IF EXISTS sprints CASCADE`;
+    await client.sql`DROP TABLE IF EXISTS countries CASCADE`;
+    await client.sql`DROP TABLE IF EXISTS users CASCADE`;
+    await client.sql`DROP TABLE IF EXISTS country CASCADE`;
+    await client.sql`DROP TABLE IF EXISTS langues CASCADE`;
+    await client.sql`DROP TABLE IF EXISTS continents CASCADE`;
+    await client.sql`DROP TABLE IF EXISTS score CASCADE`;
+    console.log('Dropped existing tables');
+  } catch (error) {
+    console.error('Error dropping tables:', error);
+    throw error;
+  }
+}
+
+async function createUsersTable(client) {
+  try {
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS users (
+        id_user UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        username VARCHAR(255) NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL
+      );
+    `;
+    console.log('Created "users" table');
+  } catch (error) {
+    console.error('Error creating "users" table:', error);
+    throw error;
+  }
+}
+
+async function createSprintsTable(client) {
+  try {
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS sprints (
+        id_sprint UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        score_date TIMESTAMP NOT NULL,
+        nb_secret_find INT NOT NULL,
+        nb_penalities INT NOT NULL,
+        id_user UUID NOT NULL,
+        FOREIGN KEY(id_user) REFERENCES users(id_user)
+      );
+    `;
+    console.log('Created "sprints" table');
+  } catch (error) {
+    console.error('Error creating "sprints" table:', error);
+    throw error;
+  }
+}
+
+async function createCountriesTable(client) {
+  try {
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS countries (
+        id_country UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        name VARCHAR(50) NOT NULL UNIQUE,
+        area FLOAT NOT NULL,
+        population INT NOT NULL,
+        region VARCHAR(50) NOT NULL,
+        subregion VARCHAR(50) NOT NULL
+      );
+    `;
+    console.log('Created "countries" table');
+  } catch (error) {
+    console.error('Error creating "countries" table:', error);
+    throw error;
+  }
+}
+
+async function createPrecisionsTable(client) {
+  try {
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS precisions (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        score_date TIMESTAMP NOT NULL,
+        duration_of_game INT NOT NULL,
+        nb_click INT NOT NULL,
+        id_country UUID NOT NULL,
+        id_user UUID NOT NULL,
+        FOREIGN KEY(id_country) REFERENCES countries(id_country) ON DELETE CASCADE,
+        FOREIGN KEY(id_user) REFERENCES users(id_user) ON DELETE CASCADE
+      );
+    `;
+    console.log('Created "precisions" table');
+  } catch (error) {
+    console.error('Error creating "precisions" table:', error);
+    throw error;
+  }
+}
+
+async function seedCountries(client) {
+  try {
+    if (!process.env.NEXT_PUBLIC_API_KEY) {
+      console.error('API key is not defined');
+      throw new Error('API key is not defined');
+    }
+
+    console.log('Using API key:', process.env.NEXT_PUBLIC_API_KEY);
+
+    const response = await fetch(`https://countryapi.io/api/all?apikey=${process.env.NEXT_PUBLIC_API_KEY}`);
+    const data = await response.json();
+
+    // Log the entire response to understand its structure
+    console.log('API response:', JSON.stringify(data, null, 2));
+
+    // Convert the object of countries into an array of country objects
+    const countries = Object.values(data);
+
+    if (!Array.isArray(countries) || countries.length === 0) {
+      console.error('Expected an array of countries, got:', countries);
+      throw new TypeError('Expected an array of countries');
+    }
+
+    const insertedCountries = await Promise.all(
+      countries.map((country) =>
+        client.sql`
+          INSERT INTO countries (name, area, population, region, subregion)
+          VALUES (
+            ${country.name}, 
+            ${parseFloat(country.area)}, 
+            ${country.population}, 
+            ${country.region}, 
+            ${country.subregion}
+          )
+          ON CONFLICT (name) DO NOTHING;
+        `
+      )
     );
 
-    CREATE TABLE Langues (
-      id SERIAL PRIMARY KEY,
-      name VARCHAR(50) NOT NULL
-    );
-
-    CREATE TABLE continents (
-      id SERIAL PRIMARY KEY,
-      name VARCHAR(50) NOT NULL
-    );
-
-    CREATE TABLE Country (
-      id SERIAL PRIMARY KEY,
-      name_country VARCHAR(50) NOT NULL,
-      superficie DECIMAL(15,2) NOT NULL,
-      nb_citizens INT NOT NULL,
-      id_1 INT NOT NULL,
-      id_2 INT NOT NULL,
-      FOREIGN KEY(id_1) REFERENCES continents(id),
-      FOREIGN KEY(id_2) REFERENCES Langues(id)
-    );
-
-    CREATE TABLE Score (
-      date_game TIMESTAMPTZ,
-      nb_tentative INT NOT NULL,
-      duration DECIMAL(15,2),
-      id INT NOT NULL,
-      id_1 INT NOT NULL,
-      PRIMARY KEY(date_game),
-      FOREIGN KEY(id) REFERENCES Country(id),
-      FOREIGN KEY(id_1) REFERENCES Users(id)
-    );
-  `;
-
-  console.log(`Created tables`);
-
-  // Insérer des utilisateurs de test
-  const insertedUsers = await Promise.all(
-    users.map(async (user) => {
-      console.log('Inserting user:', user); // Ajoutez ce log pour vérifier les données
-      const hashedPassword = await bcrypt.hash(user.password, 10);
-      return client.sql`
-        INSERT INTO Users (name_user, email, password)
-        VALUES (${user.name}, ${user.email}, ${hashedPassword})
-        ON CONFLICT (email) DO NOTHING;
-      `;
-    })
-  );
-
-  console.log(`Seeded ${insertedUsers.length} users`);
+    console.log(`Seeded ${insertedCountries.length} countries`);
+    return { insertedCountries };
+  } catch (error) {
+    console.error('Error seeding countries:', error);
+    throw error;
+  }
 }
 
 async function main() {
-  try {
-    const client = await db.connect();
-    console.log('Connected to the database');
+  const client = await db.connect();
 
-    await seedDatabase(client);
+  try {
+    await dropTables(client); // Drop existing tables
+    await createUsersTable(client); // Create users table
+    await createSprintsTable(client); // Create sprints table
+    await createCountriesTable(client); // Create countries table
+    await createPrecisionsTable(client); // Create precisions table
+    await seedCountries(client); // Seed the countries table
+  } catch (err) {
+    console.error('An error occurred during seeding:', err);
+  } finally {
     await client.end();
-    console.log('Database connection closed');
+  }
+}
+
+
+async function seedPrecision(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS precisions (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        score_date TIMESTAMP NOT NULL,
+        duration_of_game INT NOT NULL,
+        nb_click INT NOT NULL,
+        id_country UUID NOT NULL,
+        id_user UUID NOT NULL,
+        FOREIGN KEY(id_country) REFERENCES countries(id_country) ON DELETE CASCADE,
+        FOREIGN KEY(id_user) REFERENCES users(id_user) ON DELETE CASCADE
+      );
+    `;
+
+    console.log('Created "precisions" table');
+    return { createTable };
   } catch (error) {
-    console.error('An error occurred while attempting to seed the database:', error);
+    console.error('Error seeding precisions:', error);
+    throw error;
+  }
+}
+
+async function main() {
+  const client = await db.connect();
+
+  try {
+    await dropTables(client); // Drop existing tables
+    await seedUsers(client);
+    await seedSprint(client);
+    await seedCountries(client);
+    await seedPrecision(client);
+  } catch (err) {
+    console.error('An error occurred during seeding:', err);
+  } finally {
+    await client.end();
   }
 }
 

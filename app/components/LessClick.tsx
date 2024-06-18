@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Country } from '../types/country';
+import {Countries} from '../lib/definitions';
 import AnswerCube from '../components/answer-cube';
 import { setSecret } from '../utils/secretCountry';
+import { insertPrecisionScore } from '../lib/data';
+import { useUser } from '../context/UserContext';
 
 interface LessClickProps {
-  setCountryClicked: (country: Country | null) => void;
+  setCountryClicked: (country: Countries | null) => void;
   setActivePlay: (active: boolean) => void;
-  secretCountry: Country | null;
+  secretCountry: Countries | null;
   activePlay: boolean;
   numberOfClick: number;
   setNumberOfClick: (number: number) => void;
-  countryClicked: Country | null;
-  setSecretCountry: (country: Country | null) => void;
+  countryClicked: Countries | null;
+  setSecretCountry: (country: Countries | null) => void;
   victory: boolean;
   setVictory: (victory: boolean) => void;
 }
@@ -31,6 +33,7 @@ const LessClick: React.FC<LessClickProps> = ({
   const [timeElapsed, setTimeElapsed] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const initialized = useRef(false);
+  const { user } = useUser();
 
   const startGame = async () => {
     setCountryClicked(null);
@@ -65,18 +68,26 @@ const LessClick: React.FC<LessClickProps> = ({
   }, []);
 
   useEffect(() => {
-    let count = numberOfClick + 1;
-    setNumberOfClick(count);
     if (countryClicked && secretCountry) {
+      const newNumberOfClick = numberOfClick + 1;
+      setNumberOfClick(newNumberOfClick);
+  
       if (countryClicked.name === secretCountry.name) {
         setVictory(true);
         setActivePlay(false);
+  
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
+        }
+  
+        if (user) {
+          console.log(secretCountry.id_country, user.id, timeElapsed, newNumberOfClick);
+          insertPrecisionScore(timeElapsed, newNumberOfClick, user.id, secretCountry.id_country);
         }
       }
     }
   }, [countryClicked]);
+  
 
   const formattedTime = `${Math.floor(timeElapsed / 60)}:${timeElapsed % 60 < 10 ? `0${timeElapsed % 60}` : timeElapsed % 60}`;
 
