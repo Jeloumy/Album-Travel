@@ -35,6 +35,10 @@ h2{
   }
 }
 
+td,th {
+  @apply py-2;
+}
+
 .map-container {
   border-radius: 10px; /* Vous pouvez ajuster ce nombre selon le degré de courbure souhaité */
 }

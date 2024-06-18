@@ -1,24 +1,24 @@
-import { Country } from '../types/country';
+import { Countries } from "../lib/definitions";
+import { fetchCountries } from '../lib/data';
 
-export async function setSecret(): Promise<Country> {
-  let randomCountry: Country | undefined; // Initialize to undefined
+export async function setSecret(): Promise<Countries> {
+  let randomCountry: Countries | undefined; // Initialize to undefined
   try {
-    const response = await fetch(`https://countryapi.io/api/all?apikey=${process.env.NEXT_PUBLIC_API_KEY}`);
-    const data = await response.json();
+    let data = await fetchCountries(); // Add await here
+    
     let population = 0;
     while (!randomCountry || population < 100000) { // Adjusted loop condition
       const countries = Object.keys(data);
       const randomIndex = Math.floor(Math.random() * countries.length);
-      const randomCountryCode = countries[randomIndex];
-      randomCountry = data[randomCountryCode];
+      randomCountry = data[randomIndex];
       if(randomCountry) {
         population = randomCountry?.population;
       }
     }
-    console.log('Random country population:', randomCountry.name);
+    console.log('Random Countries population:', randomCountry.name);
     return randomCountry;
   } catch (error) {
-    console.error("Error fetching random country:", error);
+    console.error("Error fetching random Countries:", error);
     throw error; // Rethrow the error to propagate it
   }
 }

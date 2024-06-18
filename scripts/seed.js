@@ -160,6 +160,48 @@ async function main() {
   }
 }
 
+
+async function seedPrecision(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS precisions (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        score_date TIMESTAMP NOT NULL,
+        duration_of_game INT NOT NULL,
+        nb_click INT NOT NULL,
+        id_country UUID NOT NULL,
+        id_user UUID NOT NULL,
+        FOREIGN KEY(id_country) REFERENCES countries(id_country) ON DELETE CASCADE,
+        FOREIGN KEY(id_user) REFERENCES users(id_user) ON DELETE CASCADE
+      );
+    `;
+
+    console.log('Created "precisions" table');
+    return { createTable };
+  } catch (error) {
+    console.error('Error seeding precisions:', error);
+    throw error;
+  }
+}
+
+async function main() {
+  const client = await db.connect();
+
+  try {
+    await dropTables(client); // Drop existing tables
+    await seedUsers(client);
+    await seedSprint(client);
+    await seedCountries(client);
+    await seedPrecision(client);
+  } catch (err) {
+    console.error('An error occurred during seeding:', err);
+  } finally {
+    await client.end();
+  }
+}
+
 main().catch((err) => {
   console.error('An unexpected error occurred:', err);
 });

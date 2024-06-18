@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import AnswerCube from '../components/answer-cube';
+import { Countries} from '../lib/definitions';
 import HeaderNav from '../ui/header-nav';
 import Sprint from '../components/Sprint';
 import LessClick from '../components/LessClick';
@@ -15,10 +16,10 @@ const DynamicWorldMap = dynamic(() => import('../components/WorldMap'), {
   ssr: false,
 });
 
+
 const Home: React.FC = () => {
-  const [countries, setCountries] = useState<Country[]>([]);
-  const [countryClicked, setCountryClicked] = useState<Country | null>(null);
-  const [secretCountry, setSecretCountry] = useState<Country | null>(null);
+  const [countryClicked, setCountryClicked] = useState<Countries | null>(null);
+  const [secretCountry, setSecretCountry] = useState<Countries | null>(null);
   const [activePlay, setActivePlay] = useState<boolean>(false);
   const [numberOfClick, setNumberOfClick] = useState<number>(0);
   const [gameMode, setGameMode] = useState<null | 'Sprint' | 'Precision'>(null);

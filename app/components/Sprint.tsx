@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Country } from '../types/country';
+import { Countries} from '../lib/definitions';
 import AnswerCube from '../components/answer-cube';
 import { setSecret } from '../utils/secretCountry';
 
 interface SprintProps {
-  setCountryClicked: (country: Country | null) => void;
+  setCountryClicked: (country: Countries | null) => void;
   setActivePlay: (active: boolean) => void;
-  secretCountry: Country | null;
+  secretCountry: Countries | null;
   activePlay: boolean;
-  countryClicked: Country | null;
-  setSecretCountry: (country: Country | null) => void;
+  countryClicked: Countries | null;
+  setSecretCountry: (country: Countries | null) => void;
 }
 
 const Sprint: React.FC<SprintProps> = ({
@@ -23,7 +23,7 @@ const Sprint: React.FC<SprintProps> = ({
   const [timeLeft, setTimeLeft] = useState(90); // 90 seconds = 1m30s
   const [timeDeduction, setTimeDeduction] = useState<number | null>(null);
   const [timeAddition, setTimeAddition] = useState<number | null>(null);
-  const [listOfCountries, setListOfCountries] = useState<Country[]>([]);
+  const [listOfCountries, setListOfCountries] = useState<Countries[]>([]);
 
   const initialized = useRef(false);
 

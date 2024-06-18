@@ -11,8 +11,17 @@ export default function SideNav() {
   };
 
   return (
-    <div className="flex w-full px-3 py-4 md:px-2 justify-end">
+    <div className="flex w-full px-3 py-4 md:px-2 justify-end gap-4">
       <div>
+        < Link href="/home" className="text-primary">
+              <div className="hidden md:block">Home</div>
+          </Link>
+      </div>
+      <div>
+      < Link href="/score" className="text-secondary">
+            <div className="hidden md:block">Score</div>
+        </Link>
+      </div>
         <form
           action={onSignOut}
         >
@@ -20,7 +29,6 @@ export default function SideNav() {
             <div className="hidden md:block">Sign Out</div>
           </button>
         </form>
-      </div>
     </div>
   );
 }

@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Country } from '../types/country';
+import {Countries} from '../lib/definitions';
 import AnswerCube from '../components/answer-cube';
 import { setSecret } from '../utils/secretCountry';
 
 interface LessClickProps {
-  setCountryClicked: (country: Country | null) => void;
+  setCountryClicked: (country: Countries | null) => void;
   setActivePlay: (active: boolean) => void;
-  secretCountry: Country | null;
+  secretCountry: Countries | null;
   activePlay: boolean;
   numberOfClick: number;
   setNumberOfClick: (number: number) => void;
-  countryClicked: Country | null;
-  setSecretCountry: (country: Country | null) => void;
+  countryClicked: Countries | null;
+  setSecretCountry: (country: Countries | null) => void;
   victory: boolean;
   setVictory: (victory: boolean) => void;
 }
