@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { handleSignOut } from './signOutAction';
 import { useRouter } from 'next/navigation';
+import { useUser } from '../context/UserContext';
 
 export default function SideNav() {
   const router = useRouter();
+  const { user } = useUser(); 
 
   const onSignOut = async () => {
     // Supprime les données de l'utilisateur du localStorage
@@ -17,7 +19,11 @@ export default function SideNav() {
   };
 
   return (
-    <div className="flex w-full px-3 py-4 md:px-2 justify-end gap-4">
+    <div className='flex justify-between w-full items-center'>
+      {user && (
+        <h2>Bienvenue, {user.name}!</h2>
+      )}
+    <div className="flex  px-3 py-4 md:px-2 justify-end gap-4">
       <div>
         < Link href="/home" className="text-primary">
               <div className="hidden md:block">Home</div>
@@ -35,6 +41,7 @@ export default function SideNav() {
             <div className="hidden md:block">Sign Out</div>
           </button>
         </form>
+    </div>
     </div>
   );
 }
