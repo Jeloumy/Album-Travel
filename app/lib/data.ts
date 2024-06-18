@@ -47,7 +47,7 @@ export async function fetchSprintScore() {
       SELECT s.*, u.username
       FROM sprints s
       JOIN users u ON s.id_user = u.id_user
-      ORDER BY s.nb_secret_find ASC, s.nb_penalities ASC;
+      ORDER BY s.nb_secret_find DESC, s.nb_penalities ASC;
     `;
     console.log(data);
     return data.rows as Sprints[];
@@ -64,7 +64,7 @@ export async function fetchPrecisionScore() {
     SELECT p.*, u.username
     FROM precisions p
     JOIN users u ON p.id_user = u.id_user
-    ORDER BY nb_click DESC, duration_of_game ASC`;
+    ORDER BY nb_click ASC, duration_of_game ASC`;
     return data.rows as Precisions[];
   } catch (error) {
     console.error('Database Error:', error);

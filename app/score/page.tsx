@@ -38,7 +38,7 @@ const Score: React.FC = () => {
               <tr>
                 <th>Rang</th>
                 <th>Utilisateur</th>
-                <th>Nb pays dévinés</th>
+                <th>Nb pays devinés</th>
                 <th>Nb pénalités</th>
                 <th>Date</th>
               </tr>
