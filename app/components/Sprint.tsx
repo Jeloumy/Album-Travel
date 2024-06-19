@@ -160,7 +160,9 @@ const Sprint: React.FC<SprintProps> = ({
           </div>
         )}
       </div>
-
+      {!countryClicked && (
+        <p className='text-center mt-6'>Course contre la montre où les joueurs doivent trouver autant de pays que possible en 90 secondes. Trouver un pays correct ajoute 10 secondes, mais se tromper en retire 5.</p>
+      )}
       {/* Affichage des informations sur le pays cliqué et le pays secret */}
       {timeLeft > 0 && countryClicked && secretCountry && (
         <div className='w-full'>

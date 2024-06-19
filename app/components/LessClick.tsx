@@ -94,6 +94,9 @@ const LessClick: React.FC<LessClickProps> = ({
 
   return (
     <div className="flex-col flex items-center">
+      {!countryClicked && (
+        <p className='text-center'>Appuyer sur des pays de la carte pour obtenir des indices pour trouver le pays secret, dans ce mode le but est de trouver le pays en le moins de click possible</p>
+      )}
       {countryClicked && secretCountry && (
         <div className='w-full'>
           <div className="flex w-full justify-around mt-4 mb-8">

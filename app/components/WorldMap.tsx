@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L, { GeoJSON } from 'leaflet';
-import axios from 'axios';
-import { Country } from '../types/country';
+
 import { Countries } from '../lib/definitions';
 import {fetchCountry} from '../lib/data';
 
