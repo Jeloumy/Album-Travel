@@ -52,7 +52,7 @@ const Home: React.FC = () => {
             <div className="grid grid-cols-2 gap-4 h-full">
               <div className="relative flex flex-col justify-center items-center p-8 border border-accent rounded gap-2">
                 <h4 className="text-accent font-bold text-xl text-center">Sprint des Nations</h4>
-                <p className="text-center">Trouvez le maximum de pays avant que le temps ne s'écoule.</p>
+                <p className="text-center">Trouvez le maximum de pays avant que le temps ne s&apos;écoule.</p>
                 <button className="btn btn-outline btn-accent mt-2" onClick={() => setGameMode("Sprint")}>Jouer</button>
                 <div 
                   className="relative" 
