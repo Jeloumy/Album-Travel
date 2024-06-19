@@ -65,7 +65,8 @@ async function createCountriesTable(client) {
         area FLOAT NOT NULL,
         population INT NOT NULL,
         region VARCHAR(50) NOT NULL,
-        subregion VARCHAR(50) NOT NULL
+        subregion VARCHAR(50) NOT NULL,
+        flag_link VARCHAR(255) NOT NULL
       );
     `;
     console.log('Created "countries" table');
@@ -122,13 +123,14 @@ async function seedCountries(client) {
     const insertedCountries = await Promise.all(
       countries.map((country) =>
         client.sql`
-          INSERT INTO countries (name, area, population, region, subregion)
+          INSERT INTO countries (name, area, population, region, subregion,flag_link)
           VALUES (
             ${country.name}, 
             ${parseFloat(country.area)}, 
             ${country.population}, 
             ${country.region}, 
-            ${country.subregion}
+            ${country.subregion},
+            ${country.flag.large}
           )
           ON CONFLICT (name) DO NOTHING;
         `
@@ -186,21 +188,6 @@ async function seedPrecision(client) {
   }
 }
 
-async function main() {
-  const client = await db.connect();
-
-  try {
-    await dropTables(client); // Drop existing tables
-    await seedUsers(client);
-    await seedSprint(client);
-    await seedCountries(client);
-    await seedPrecision(client);
-  } catch (err) {
-    console.error('An error occurred during seeding:', err);
-  } finally {
-    await client.end();
-  }
-}
 
 main().catch((err) => {
   console.error('An unexpected error occurred:', err);

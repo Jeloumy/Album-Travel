@@ -13,6 +13,7 @@ export type Countries = {
   subregion: string;
   region: string;
   area: number;
+  flag_link: string;
 };
 
 export interface Sprints {

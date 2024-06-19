@@ -68,7 +68,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ setCountryClicked, secretCountry, a
                   try {
                     let data = await fetchCountry(feature.properties.name);
                     setCountryClicked(data[0]);
-                    console.log("Country data:", data[0].area);
+                    console.log("Country data:", data[0]);
                   } catch (error) {
                     console.error("Error fetching country data:", error);
                   }

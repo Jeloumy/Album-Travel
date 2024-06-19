@@ -4,7 +4,7 @@ import AnswerCube from '../components/answer-cube';
 import { setSecret } from '../utils/secretCountry';
 import {insertSprintScore} from '../lib/data';
 import { useUser } from '../context/UserContext';
-
+import Image from 'next/image';
 
 interface SprintProps {
   setCountryClicked: (country: Countries | null) => void;
@@ -164,7 +164,22 @@ const Sprint: React.FC<SprintProps> = ({
       {/* Affichage des informations sur le pays cliqué et le pays secret */}
       {timeLeft > 0 && countryClicked && secretCountry && (
         <div className='w-full'>
-          <div className="flex w-full justify-around mt-4">
+          <div className="flex w-full justify-around mt-4 mb-8">
+            {countryClicked && countryClicked.flag_link && (
+              <div className='flex flex-col justify-between items-center'>
+                <div className="w-20 my-2">
+                  <Image
+                    src={countryClicked.flag_link}
+                    alt="flag"
+                    layout="responsive"
+                    width={60}
+                    height={40}
+                    objectFit="contain"
+                  />
+                </div>
+                <p>{countryClicked.name}</p>
+              </div>
+            )}
             <AnswerCube label="Superficie" colorClass="" info={countryClicked.area} dataCountrySecret={secretCountry.area} />
             <AnswerCube label="Continent" colorClass="" info={countryClicked.region} dataCountrySecret={secretCountry.region} />
             <AnswerCube label="Région" colorClass="" info={countryClicked.subregion} dataCountrySecret={secretCountry.subregion} />

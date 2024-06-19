@@ -65,7 +65,7 @@ const Home: React.FC = () => {
             <div className="p-4 border-2 border-neutral-content rounded h-full">
               <div className='flex justify-between items-center'>
                 <h2>Résultat</h2>
-                <button className="btn btn-secondary" onClick={() => { setGameMode(null); setActivePlay(false); setVictory(false) }}>Retour</button>
+                <button className="btn" onClick={() => { setGameMode(null); setActivePlay(false); setVictory(false) }}>Retour</button>
               </div>
               {gameMode === 'Sprint' && <Sprint setCountryClicked={setCountryClicked} secretCountry={secretCountry} setSecretCountry={setSecretCountry} countryClicked={countryClicked} activePlay={activePlay} setActivePlay={setActivePlay} />}
               {gameMode === 'Precision' && <LessClick setVictory={setVictory} victory={victory} setCountryClicked={setCountryClicked} secretCountry={secretCountry} setSecretCountry={setSecretCountry} countryClicked={countryClicked} activePlay={activePlay} setActivePlay={setActivePlay} numberOfClick={numberOfClick} setNumberOfClick={setNumberOfClick} />}

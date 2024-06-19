@@ -18,7 +18,7 @@ export async function fetchCountries() {
   noStore();
   try {
     const data = await sql`
-      SELECT countries.id_country, countries.name, countries.population, countries.subregion, countries.region, countries.area
+      SELECT countries.id_country, countries.name, countries.population, countries.subregion, countries.region, countries.area, countries.flag_link
       FROM countries`;
     return data.rows as Countries[];
   } catch (error) {
@@ -31,7 +31,7 @@ export async function fetchCountry(name: string) {
   noStore();
   try {
     const data = await sql`
-      SELECT countries.name, countries.population, countries.subregion, countries.region, countries.area
+      SELECT countries.name, countries.population, countries.subregion, countries.region, countries.area, countries.flag_link
       FROM countries WHERE countries.name=${name}`;
     return data.rows as Countries[];
   } catch (error) {
@@ -47,7 +47,7 @@ export async function fetchSprintScore() {
       SELECT s.*, u.username
       FROM sprints s
       JOIN users u ON s.id_user = u.id_user
-      ORDER BY s.nb_secret_find DESC, s.nb_penalities ASC;
+      ORDER BY s.nb_secret_find DESC, s.nb_penalities ASC LIMIT 50;
     `;
     console.log(data);
     return data.rows as Sprints[];
@@ -64,7 +64,7 @@ export async function fetchPrecisionScore() {
     SELECT p.*, u.username
     FROM precisions p
     JOIN users u ON p.id_user = u.id_user
-    ORDER BY nb_click ASC, duration_of_game ASC`;
+    ORDER BY nb_click ASC, duration_of_game ASC LIMIT 50`;
     return data.rows as Precisions[];
   } catch (error) {
     console.error('Database Error:', error);
