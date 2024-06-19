@@ -90,9 +90,9 @@ const Sprint: React.FC<SprintProps> = ({
       }, 100);
       return () => clearTimeout(deductionTimer);
     } else if (countryClicked && countryClicked.name === secretCountry?.name) {
-      setTimeLeft(prevTime => Math.max(prevTime + 10, 0));
+      setTimeLeft(prevTime => Math.max(prevTime + 30, 0));
       const additionTimer = setTimeout(() => {
-        setTimeAddition(+10);
+        setTimeAddition(+30);
         setTimeout(() => {
           setTimeAddition(null);
         }, 1000);
@@ -140,7 +140,7 @@ const Sprint: React.FC<SprintProps> = ({
             )}
             {timeAddition !== null && (
               <div className="mt-2 text-primary font-bold">
-                  +10 secondes !
+                  +30 secondes !
               </div>
             )}
           </div>

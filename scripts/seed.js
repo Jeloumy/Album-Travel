@@ -106,13 +106,12 @@ async function seedCountries(client) {
 
     console.log('Using API key:', process.env.NEXT_PUBLIC_API_KEY);
 
+    // Récupère tous les pays depuis l'API
     const response = await fetch(`https://countryapi.io/api/all?apikey=${process.env.NEXT_PUBLIC_API_KEY}`);
     const data = await response.json();
 
-    // Log the entire response to understand its structure
     console.log('API response:', JSON.stringify(data, null, 2));
 
-    // Convert the object of countries into an array of country objects
     const countries = Object.values(data);
 
     if (!Array.isArray(countries) || countries.length === 0) {
@@ -120,6 +119,7 @@ async function seedCountries(client) {
       throw new TypeError('Expected an array of countries');
     }
 
+    // Insère les pays dans la base de données
     const insertedCountries = await Promise.all(
       countries.map((country) =>
         client.sql`

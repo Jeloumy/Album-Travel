@@ -19,7 +19,7 @@ export default function SideNav() {
   };
 
   return (
-    <div className='flex justify-between w-full items-center'>
+    <div className='flex justify-between w-full items-center pt-6 pb-8 pr-16'>
       {user && (
         <h2>Bienvenue, {user.name}!</h2>
       )}
